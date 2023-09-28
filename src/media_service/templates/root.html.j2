@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <script src="/static/htmx.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body hx-boost="true" , class="bg-gray-700 text-gray-300 p-2">
+  <form id="form" hx-encoding="multipart/form-data" hx-post="/upload" hx-target="#files" hx-swap="beforeend"
+    class="outline rounded p-2 m-4">
+    <input type="file" name="file" />
+    <input class="outline rounded hover:bg-gray-900 p-2 m-2" type="submit" value="Upload" />
+    <progress id="progress" value="0" max="100"></progress>
+  </form>
+  <script>
+    htmx.on("#form", "htmx:xhr:progress", function (evt) {
+      htmx
+        .find("#progress")
+        .setAttribute("value", (evt.detail.loaded / evt.detail.total) * 100);
+    });
+  </script>
+  {% include "file_list.html.j2" %}
+</body>
+
+</html>
